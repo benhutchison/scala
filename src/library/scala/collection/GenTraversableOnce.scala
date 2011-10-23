@@ -7,6 +7,8 @@
 \*                                                                      */
 
 package scala.collection
+import scala.math.Additive
+import scala.math.Multiplicative
 
 /** A template trait for all traversable-once objects which may be
  *  traversed in parallel.
@@ -322,7 +324,7 @@ trait GenTraversableOnce[+A] {
    *   Examples of such types are: `Long`, `Float`, `Double`, `BigInt`.
    * 
    */
-  def sum[A1 >: A](implicit num: Numeric[A1]): A1
+  def sum[A1 >: A](implicit addition: Additive[A1]): A1
   
   /** Multiplies up the elements of this collection.
    * 
@@ -338,7 +340,7 @@ trait GenTraversableOnce[+A] {
    *   can be used as element type of the $coll and as result type of `product`. 
    *   Examples of such types are: `Long`, `Float`, `Double`, `BigInt`.
    */
-  def product[A1 >: A](implicit num: Numeric[A1]): A1
+  def product[A1 >: A](implicit num: Multiplicative[A1]): A1
   
   /** Finds the smallest element.
    *

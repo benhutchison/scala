@@ -10,6 +10,7 @@
 
 package scala.math
 
+
 /**
  * @since 2.8
  */
@@ -31,7 +32,9 @@ object Integral {
      *  bumping into one another when searching for this implicit, so they
      *  are exiled into their own companions.
      */
-    implicit def infixIntegralOps[T](x: T)(implicit num: Integral[T]): Integral[T]#IntegralOps = new num.IntegralOps(x)
+    implicit def infixIntegralOpss[T](x: T)(implicit num: Integral[T]): Integral[T]#IntegralOps = new num.IntegralOps(x)
   }
-  object Implicits extends ExtraImplicits
+  object Implicits extends ExtraImplicits {
+//     implicit def infixIntegralOps[T](x: T)(implicit num: Integral[T]): Integral[T]#IntegralOps = new num.IntegralOps(x)
+  }
 }

@@ -8,6 +8,8 @@
 
 package scala.collection
 package interfaces
+import scala.math.Multiplicative
+import scala.math.Additive
 
 trait TraversableOnceMethods[+A] {
   self: TraversableOnce[A] =>
@@ -63,8 +65,8 @@ trait TraversableOnceMethods[+A] {
   def max[B >: A](implicit cmp: Ordering[B]): A
   def minBy[B](f: A => B)(implicit cmp: Ordering[B]): A
   def min[B >: A](implicit cmp: Ordering[B]): A
-  def product[B >: A](implicit num: Numeric[B]): B
-  def sum[B >: A](implicit num: Numeric[B]): B
+  def product[B >: A](implicit num: Multiplicative[B]): B
+  def sum[B >: A](implicit num: Additive[B]): B
   
   // strings
   def mkString(start: String, sep: String, end: String): String

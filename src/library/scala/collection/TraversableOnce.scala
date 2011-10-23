@@ -10,6 +10,8 @@ package scala.collection
 
 import mutable.{ Buffer, ListBuffer, ArrayBuffer }
 import annotation.unchecked.{ uncheckedVariance => uV }
+import scala.math.Additive
+import scala.math.Multiplicative
 
 /** A template trait for collections which can be traversed either once only
  *  or one or more times.
@@ -185,9 +187,9 @@ trait TraversableOnce[+A] extends GenTraversableOnce[A] {
   
   def aggregate[B](z: B)(seqop: (B, A) => B, combop: (B, B) => B): B = foldLeft(z)(seqop)
   
-  def sum[B >: A](implicit num: Numeric[B]): B = foldLeft(num.zero)(num.plus)
+  def sum[B >: A](implicit num: Additive[B]): B = foldLeft(num.zero)(num.plus)
   
-  def product[B >: A](implicit num: Numeric[B]): B = foldLeft(num.one)(num.times)
+  def product[B >: A](implicit num: Multiplicative[B]): B = foldLeft(num.one)(num.times)
 
   def min[B >: A](implicit cmp: Ordering[B]): A = {
     if (isEmpty)

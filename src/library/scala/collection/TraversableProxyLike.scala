@@ -12,6 +12,8 @@ package scala.collection
 
 import generic._
 import mutable.{Buffer, StringBuilder}
+import scala.math.Additive
+import scala.math.Multiplicative
 
 // Methods could be printed by  cat TraversableLike.scala | egrep '^  (override )?def'
 
@@ -52,8 +54,8 @@ trait TraversableProxyLike[+A, +Repr <: TraversableLike[A, Repr] with Traversabl
   override def reduceRightOption[B >: A](op: (A, B) => B): Option[B] = self.reduceRightOption(op)
   override def scanLeft[B, That](z: B)(op: (B, A) => B)(implicit bf: CanBuildFrom[Repr, B, That]): That = self.scanLeft(z)(op)(bf)
   override def scanRight[B, That](z: B)(op: (A, B) => B)(implicit bf: CanBuildFrom[Repr, B, That]): That = self.scanRight(z)(op)(bf)
-  override def sum[B >: A](implicit num: Numeric[B]): B = self.sum(num)
-  override def product[B >: A](implicit num: Numeric[B]): B = self.product(num)
+  override def sum[B >: A](implicit num: Additive[B]): B = self.sum(num)
+  override def product[B >: A](implicit num: Multiplicative[B]): B = self.product(num)
   override def min[B >: A](implicit cmp: Ordering[B]): A = self.min(cmp)
   override def max[B >: A](implicit cmp: Ordering[B]): A = self.max(cmp)
   override def head: A = self.head

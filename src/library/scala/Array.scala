@@ -220,7 +220,7 @@ object Array extends FallbackArrayBuilding {
    */
   def concat[T: ClassManifest](xss: Array[T]*): Array[T] = {
     val b = newBuilder[T]
-    b.sizeHint(xss.map(_.size).sum)
+    b.sizeHint(xss.map(_.size).sum(Numeric.IntIsIntegral))
     for (xs <- xss) b ++= xs
     b.result
   }

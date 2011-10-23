@@ -24,10 +24,11 @@ import scala.collection.GenIterable
 import scala.collection.GenTraversableOnce
 import scala.collection.GenTraversable
 import immutable.HashMapCombiner
-
 import java.util.concurrent.atomic.AtomicBoolean
-
 import annotation.unchecked.uncheckedVariance
+import scala.math.Additive
+import scala.math.Additive
+import scala.math.Multiplicative
 
 
 
@@ -478,11 +479,11 @@ self: ParIterableLike[T, Repr, Sequential] =>
     executeAndWaitResult(new Count(p, splitter))
   }
   
-  def sum[U >: T](implicit num: Numeric[U]): U = {
+  def sum[U >: T](implicit num: Additive[U]): U = {
     executeAndWaitResult(new Sum[U](num, splitter))
   }
   
-  def product[U >: T](implicit num: Numeric[U]): U = {
+  def product[U >: T](implicit num: Multiplicative[U]): U = {
     executeAndWaitResult(new Product[U](num, splitter))
   }
   
@@ -945,14 +946,14 @@ self: ParIterableLike[T, Repr, Sequential] =>
     override def merge(that: Aggregate[S]) = result = combop(result, that.result)
   }
   
-  protected[this] class Sum[U >: T](num: Numeric[U], protected[this] val pit: IterableSplitter[T]) extends Accessor[U, Sum[U]] {
+  protected[this] class Sum[U >: T](num: Additive[U], protected[this] val pit: IterableSplitter[T]) extends Accessor[U, Sum[U]] {
     @volatile var result: U = null.asInstanceOf[U]
     def leaf(prevr: Option[U]) = result = pit.sum(num)
     protected[this] def newSubtask(p: IterableSplitter[T]) = new Sum(num, p)
     override def merge(that: Sum[U]) = result = num.plus(result, that.result)
   }
   
-  protected[this] class Product[U >: T](num: Numeric[U], protected[this] val pit: IterableSplitter[T]) extends Accessor[U, Product[U]] {
+  protected[this] class Product[U >: T](num: Multiplicative[U], protected[this] val pit: IterableSplitter[T]) extends Accessor[U, Product[U]] {
     @volatile var result: U = null.asInstanceOf[U]
     def leaf(prevr: Option[U]) = result = pit.product(num)
     protected[this] def newSubtask(p: IterableSplitter[T]) = new Product(num, p)

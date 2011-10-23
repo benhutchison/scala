@@ -21,6 +21,10 @@ object Numeric {
      *  }}}
      */
     implicit def infixNumericOps[T](x: T)(implicit num: Numeric[T]): Numeric[T]#Ops = new num.Ops(x)    
+    
+    implicit def infixAdditiveOps[T](x: T)(implicit num: Additive[T]): Additive[T]#Ops = new num.Ops(x)
+    implicit def infixSubtractiveOps[T](x: T)(implicit num: Subtractive[T]): Subtractive[T]#Ops = new num.Ops(x)
+    implicit def infixMultiplicativeOps[T](x: T)(implicit num: Multiplicative[T]): Multiplicative[T]#Ops = new num.Ops(x)    
   }
   object Implicits extends ExtraImplicits { }
   
@@ -36,6 +40,8 @@ object Numeric {
     def toLong(x: BigInt): Long = x.longValue
     def toFloat(x: BigInt): Float = x.longValue.toFloat
     def toDouble(x: BigInt): Double = x.longValue.toDouble
+    def zero = BigInt(0)    
+    def one = BigInt(1)
   }
   implicit object BigIntIsIntegral extends BigIntIsIntegral with Ordering.BigIntOrdering
   
@@ -51,6 +57,8 @@ object Numeric {
     def toLong(x: Int): Long = x
     def toFloat(x: Int): Float = x
     def toDouble(x: Int): Double = x
+    def zero = 0  
+    def one = 1   
   }
   implicit object IntIsIntegral extends IntIsIntegral with Ordering.IntOrdering
   
@@ -66,6 +74,8 @@ object Numeric {
     def toLong(x: Short): Long = x.toLong
     def toFloat(x: Short): Float = x.toFloat
     def toDouble(x: Short): Double = x.toDouble
+    def zero = 0.toShort  
+    def one = 1.toShort    
   }
   implicit object ShortIsIntegral extends ShortIsIntegral with Ordering.ShortOrdering
   
@@ -81,6 +91,8 @@ object Numeric {
     def toLong(x: Byte): Long = x.toLong
     def toFloat(x: Byte): Float = x.toFloat
     def toDouble(x: Byte): Double = x.toDouble
+    def zero = 0.toByte  
+    def one = 1.toByte  
   }
   implicit object ByteIsIntegral extends ByteIsIntegral with Ordering.ByteOrdering
   
@@ -96,6 +108,8 @@ object Numeric {
     def toLong(x: Char): Long = x.toLong
     def toFloat(x: Char): Float = x.toFloat
     def toDouble(x: Char): Double = x.toDouble
+    def zero = 0.toChar 
+    def one = 1.toChar
   }
   implicit object CharIsIntegral extends CharIsIntegral with Ordering.CharOrdering
   
@@ -111,6 +125,8 @@ object Numeric {
     def toLong(x: Long): Long = x
     def toFloat(x: Long): Float = x
     def toDouble(x: Long): Double = x
+    def zero = 0L 
+    def one = 1L   
   }
   implicit object LongIsIntegral extends LongIsIntegral with Ordering.LongOrdering
   
@@ -124,6 +140,8 @@ object Numeric {
     def toLong(x: Float): Long = x.toLong
     def toFloat(x: Float): Float = x
     def toDouble(x: Float): Double = x
+    def zero = 0f  
+    def one = 1f    
   }
   trait FloatIsFractional extends FloatIsConflicted with Fractional[Float] {
     def div(x: Float, y: Float): Float = x / y
@@ -146,6 +164,8 @@ object Numeric {
     def toLong(x: Double): Long = x.toLong
     def toFloat(x: Double): Float = x.toFloat
     def toDouble(x: Double): Double = x
+    def zero = 0d  
+    def one = 1d    
   }
   trait DoubleIsFractional extends DoubleIsConflicted with Fractional[Double] {
     def div(x: Double, y: Double): Double = x / y
@@ -165,6 +185,8 @@ object Numeric {
     def toLong(x: BigDecimal): Long = x.longValue
     def toFloat(x: BigDecimal): Float = x.floatValue
     def toDouble(x: BigDecimal): Double = x.doubleValue
+    def zero = java.math.BigDecimal.ZERO
+    def one = java.math.BigDecimal.ONE   
   }
   
   trait BigDecimalIsFractional extends BigDecimalIsConflicted with Fractional[BigDecimal] {
@@ -184,25 +206,12 @@ object Numeric {
   object DoubleAsIfIntegral extends DoubleAsIfIntegral with Ordering.DoubleOrdering
 }
 
-trait Numeric[T] extends Ordering[T] {
-  def plus(x: T, y: T): T
-  def minus(x: T, y: T): T
-  def times(x: T, y: T): T
-  def negate(x: T): T
+trait Numeric[T] extends Subtractive[T] with Multiplicative[T] {
   def fromInt(x: Int): T
   def toInt(x: T): Int
   def toLong(x: T): Long
   def toFloat(x: T): Float
   def toDouble(x: T): Double
-  
-  def zero = fromInt(0)
-  def one = fromInt(1)
-  
-  def abs(x: T): T = if (lt(x, zero)) negate(x) else x
-  def signum(x: T): Int =
-    if (lt(x, zero)) -1
-    else if (gt(x, zero)) 1
-    else 0
   
   class Ops(lhs: T) {
     def +(rhs: T) = plus(lhs, rhs)

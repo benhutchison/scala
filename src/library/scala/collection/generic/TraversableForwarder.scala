@@ -11,6 +11,8 @@ package scala.collection.generic
 import scala.collection._
 import mutable.{ Buffer, StringBuilder }
 import immutable.{ List, Stream }
+import scala.math.Additive
+import scala.math.Multiplicative
 
 /** This trait implements a forwarder for traversable objects. It forwards
  *  all calls to a different traversable, except for:
@@ -45,8 +47,8 @@ trait TraversableForwarder[+A] extends Traversable[A] {
   override def reduceLeftOption[B >: A](op: (B, A) => B): Option[B] = underlying.reduceLeftOption(op)
   override def reduceRight[B >: A](op: (A, B) => B): B = underlying.reduceRight(op)
   override def reduceRightOption[B >: A](op: (A, B) => B): Option[B] = underlying.reduceRightOption(op)
-  override def sum[B >: A](implicit num: Numeric[B]): B = underlying sum num
-  override def product[B >: A](implicit num: Numeric[B]): B = underlying product num
+  override def sum[B >: A](implicit num: Additive[B]): B = underlying sum num
+  override def product[B >: A](implicit num: Multiplicative[B]): B = underlying product num
   override def min[B >: A](implicit cmp: Ordering[B]): A = underlying min cmp
   override def max[B >: A](implicit cmp: Ordering[B]): A = underlying max cmp
   override def head: A = underlying.head

@@ -19,6 +19,8 @@ import scala.collection.mutable.Builder
 import scala.collection.Iterator.empty
 import scala.collection.GenTraversableOnce
 import scala.collection.parallel.immutable.repetition
+import scala.math.Additive
+import scala.math.Multiplicative
 
 
 
@@ -58,13 +60,13 @@ private[collection] trait AugmentedIterableIterator[+T] extends RemainsIterator[
     r
   }
   
-  override def sum[U >: T](implicit num: Numeric[U]): U = {
+  override def sum[U >: T](implicit num: Additive[U]): U = {
     var r: U = num.zero
     while (hasNext) r = num.plus(r, next)
     r
   }
   
-  override def product[U >: T](implicit num: Numeric[U]): U = {
+  override def product[U >: T](implicit num: Multiplicative[U]): U = {
     var r: U = num.one
     while (hasNext) r = num.times(r, next)
     r

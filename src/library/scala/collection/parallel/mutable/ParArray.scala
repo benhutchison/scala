@@ -24,6 +24,8 @@ import scala.collection.parallel.CHECK_RATE
 import scala.collection.mutable.ArraySeq
 import scala.collection.mutable.Builder
 import scala.collection.GenTraversableOnce
+import scala.math.Additive
+import scala.math.Multiplicative
 
 
 
@@ -181,13 +183,13 @@ self =>
     
     override def aggregate[S](z: S)(seqop: (S, T) => S, combop: (S, S) => S): S = foldLeft[S](z)(seqop)
     
-    override def sum[U >: T](implicit num: Numeric[U]): U = {
+    override def sum[U >: T](implicit num: Additive[U]): U = {
       var s = sum_quick(num, arr, until, i, num.zero)
       i = until
       s
     }
     
-    private def sum_quick[U >: T](num: Numeric[U], a: Array[Any], ntil: Int, from: Int, zero: U): U = {
+    private def sum_quick[U >: T](num: Additive[U], a: Array[Any], ntil: Int, from: Int, zero: U): U = {
       var j = from
       var sum = zero
       while (j < ntil) {
@@ -197,13 +199,13 @@ self =>
       sum
     }
     
-    override def product[U >: T](implicit num: Numeric[U]): U = {
+    override def product[U >: T](implicit num: Multiplicative[U]): U = {
         var p = product_quick(num, arr, until, i, num.one)
         i = until
         p
     }
     
-    private def product_quick[U >: T](num: Numeric[U], a: Array[Any], ntil: Int, from: Int, one: U): U = {
+    private def product_quick[U >: T](num: Multiplicative[U], a: Array[Any], ntil: Int, from: Int, one: U): U = {
         var j = from
         var prod = one
         while (j < ntil) {
