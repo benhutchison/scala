@@ -94,6 +94,11 @@ package object scala {
   type Fractional[T] = scala.math.Fractional[T]
   type Integral[T] = scala.math.Integral[T]
 
+  type Additive[T] = scala.math.Additive[T]
+  type Subtractive[T] = scala.math.Subtractive[T]
+  type Multiplicative[T] = scala.math.Multiplicative[T]
+  type Divisive[T] = scala.math.Divisive[T]
+  
   type Numeric[T] = scala.math.Numeric[T]
   val Numeric = scala.math.Numeric
 

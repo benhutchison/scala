@@ -12,18 +12,16 @@ package scala.math
  * @since 2.8
  */
 trait Fractional[T] extends Numeric[T] {
-  def div(x: T, y: T): T
-  
-  class FractionalOps(lhs: T) extends Ops(lhs) {
-    def /(rhs: T) = div(lhs, rhs)
-  }
-  override implicit def mkNumericOps(lhs: T): FractionalOps =
-    new FractionalOps(lhs)
 }
 
 object Fractional {
   trait ExtraImplicits {
-    implicit def infixFractionalOps[T](x: T)(implicit num: Fractional[T]): Fractional[T]#FractionalOps = new num.FractionalOps(x)
+    implicit def infixNumericOps[T](x: T)(implicit num: Numeric[T]): Numeric[T]#Ops = new num.Ops(x) 
+    
+    implicit def infixAdditiveOps[T](x: T)(implicit num: Additive[T]): Additive[T]#Ops = new num.Ops(x)
+    implicit def infixSubtractiveOps[T](x: T)(implicit num: Subtractive[T]): Subtractive[T]#Ops = new num.Ops(x)
+    implicit def infixMultiplicativeOps[T](x: T)(implicit num: Multiplicative[T]): Multiplicative[T]#Ops = new num.Ops(x)   
+    implicit def infixDivisiveOps[T](x: T)(implicit num: Divisive[T]): Divisive[T]#Ops = new num.Ops(x)
   }
   object Implicits extends ExtraImplicits
 }

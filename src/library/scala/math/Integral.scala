@@ -15,11 +15,10 @@ package scala.math
  * @since 2.8
  */
 trait Integral[T] extends Numeric[T] {
-  def quot(x: T, y: T): T
+  def quot(x: T, y: T): T = div(x, y)
   def rem(x: T, y: T): T
   
   class IntegralOps(lhs: T) extends Ops(lhs) {
-    def /(rhs: T) = quot(lhs, rhs)
     def %(rhs: T) = rem(lhs, rhs)
     def /%(rhs: T) = (quot(lhs, rhs), rem(lhs, rhs))
   }
@@ -33,8 +32,11 @@ object Integral {
      *  are exiled into their own companions.
      */
     implicit def infixIntegralOpss[T](x: T)(implicit num: Integral[T]): Integral[T]#IntegralOps = new num.IntegralOps(x)
+    
+    implicit def infixAdditiveOps[T](x: T)(implicit num: Additive[T]): Additive[T]#Ops = new num.Ops(x)
+    implicit def infixSubtractiveOps[T](x: T)(implicit num: Subtractive[T]): Subtractive[T]#Ops = new num.Ops(x)
+    implicit def infixMultiplicativeOps[T](x: T)(implicit num: Multiplicative[T]): Multiplicative[T]#Ops = new num.Ops(x)   
+    implicit def infixDivisiveOps[T](x: T)(implicit num: Divisive[T]): Divisive[T]#Ops = new num.Ops(x)
   }
-  object Implicits extends ExtraImplicits {
-//     implicit def infixIntegralOps[T](x: T)(implicit num: Integral[T]): Integral[T]#IntegralOps = new num.IntegralOps(x)
-  }
+  object Implicits extends ExtraImplicits
 }

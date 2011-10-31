@@ -17,13 +17,13 @@ object Additive {
   }
   implicit object IntIsSubtractive extends IntIsSubtractive with Ordering.IntOrdering 
   
-  trait ShortSubtractive extends Subtractive[Short] {
+  trait ShortIsSubtractive extends Subtractive[Short] {
     def plus(x: Short, y: Short): Short = (x + y).toShort
     def minus(x: Short, y: Short): Short = (x - y).toShort
     def negate(x: Short): Short = (-x).toShort
     def zero = 0.toShort  
   }
-  implicit object ShortIsSubtractive extends ShortSubtractive with Ordering.ShortOrdering
+  implicit object ShortIsSubtractive extends ShortIsSubtractive with Ordering.ShortOrdering
 
   trait ByteIsSubtractive extends Subtractive[Byte] {
     def plus(x: Byte, y: Byte): Byte = (x + y).toByte
